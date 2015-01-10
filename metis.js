@@ -6,8 +6,8 @@ if (Meteor.isClient) {
 
 	Template.hello.events({
 		'click button': function () {
+			$('.loader').text('Loading...');
 			Meteor.call('getCommits', function (error, result) {
-				console.log("result:", result)
 				Session.set('commits', result);
 			});
 		}
@@ -41,7 +41,7 @@ if (Meteor.isServer) {
 							"User-Agent": "gbachik",
 							"Authorization": "Basic " + Base64.encode("gbachik" + ":" + "freedom347")
 						},
-						data:{
+						params:{
 							since: start.toISOString(),
 							until: new Date(),
 							per_page: 100,
@@ -49,19 +49,24 @@ if (Meteor.isServer) {
 						}
 					},function (error, result) {
 						if (!error) {
+							console.log(result.headers.link);
 							result.data.map(function (commit) {
-								results.data.push(commit);
+								results.data.push(commit.commit);
 							});
-							
+
 							if (result.headers.link.search("next") != -1) {
 								page++
 							}else{
 								count++
 							}
 
-							if (count < 2) {
-								page++
+							if (count < 1) {
 								loopPagination(page);
+							}else{
+								var fs = Npm.require('fs');
+								var filePath = process.env.PWD + '/commits/commits_' + (new Date()).getTime() + '.txt';
+								fs.writeFileSync(filePath, JSON.stringify(results));
+								return 'Done!';
 							}
 
 						}else{
@@ -71,12 +76,6 @@ if (Meteor.isServer) {
 				};
 
 				loopPagination(page);
-
-				var fs = Npm.require('fs');
-				var filePath = '/commits';
-				fs.writeFileSync(filePath, JSON.stringify(results));
-
-				return 'Done!';
 			}
 		});
 
