@@ -2,9 +2,34 @@ head
 	title metis application
 
 body
-	h1 D3, a year of coffee, code, and commits!
-	+hello
 
-template(name='hello')
-	button Commits
-	p.loader #{commits}
+template(name="home")
+	.container
+		h1.d3 D3: A year of coffee, code, and commits!
+		button#getCommits Get Raw JSON Commits
+		br
+		br
+		button#generateAnswers Generate Answers
+		br
+		br
+		if generated
+			+answers
+
+template(name='json')
+	span#json #{commits}
+
+template(name='answers')
+	if loading
+		h4 Loading...
+	else	
+		h4 The greatest number of commits was #{gNOC}
+		h4 The day of the week with the commits was #{gDOC}
+		p.ital I found it quite surprising at how little commis were mad to the d3 library this year! 
+		p.ital Perhaps even more surprising than that the majority of them were made during the end if year,
+		p.ital which is when most people have lots other obligations besides work.
+		canvas.chart(id="myChart2" width="1248" height="400")
+		br
+		canvas.chart(id="myChart3" width="1248" height="400")
+		br
+		canvas.chart(id="myChart" width="1248" height="400")
+		br

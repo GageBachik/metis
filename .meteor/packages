@@ -12,3 +12,7 @@ mquandalle:jade
 bruz:github-api
 http
 base64
+gerardnantel:chartjs
+d3
+iron:router
+momentjs:moment
