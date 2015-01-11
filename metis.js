@@ -105,17 +105,18 @@ if (Meteor.isClient) {
 			});
 			Session.set('gDOC', data3.labels[greatestWeedayIndex]);
 			Session.set('gNOC', mostCommitsDate);
-			Meteor.setTimeout(function(){
-				if ($("#myChart").get(0)) {
-					var ctx = $("#myChart").get(0).getContext("2d");
-					var myLineChart = new Chart(ctx).Line(data);
-					var ctx = $("#myChart2").get(0).getContext("2d");
-					var myLineChart = new Chart(ctx).Line(data2);
-					var ctx = $("#myChart3").get(0).getContext("2d");
-					var myLineChart = new Chart(ctx).Bar(data3);
-				}
-			}, 100);
-
+			Meteor.defer(function(){
+				Meteor.setTimeout(function(){
+					if ($("#myChart").get(0)) {
+						var ctx = $("#myChart").get(0).getContext("2d");
+						var myLineChart = new Chart(ctx).Line(data);
+						var ctx = $("#myChart2").get(0).getContext("2d");
+						var myLineChart = new Chart(ctx).Line(data2);
+						var ctx = $("#myChart3").get(0).getContext("2d");
+						var myLineChart = new Chart(ctx).Bar(data3);
+					}
+				}, 250);
+			});
 		});
 	};
 
